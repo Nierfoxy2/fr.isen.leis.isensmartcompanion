@@ -4,60 +4,84 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun EventView() {
-    // Get the current context to use it in the intent
     val context = LocalContext.current
+
+    // Fake events data
+    val events = getFakeEvents()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.Gray)
             .padding(16.dp)
     ) {
-        // Your Event-related content
-        Text(text = "Event 1")
-        Text(text = "Event 2")
-        Text(text = "Event 3")
+        // Displaying events using LazyColumn
+        LazyColumn {
+            items(events) { event ->
+                Column(modifier = Modifier.padding(bottom = 16.dp)) {
+                    Text(text = event.title)
+                    Text(text = event.date)
+                    Text(text = event.location)
 
-        // Button to launch EventDetailActivity
-        Button(onClick = {
-            // Launching the EventDetailActivity when clicked
-            val intent = Intent(context, EventDetailActivity::class.java)
-            context.startActivity(intent)
-        }) {
-            Text("View Event Details")
+                    // Button to navigate to EventDetailActivity
+                    Button(onClick = {
+                        // Launch EventDetailActivity with the selected event data
+                        val intent = Intent(context, EventDetailActivity::class.java).apply {
+                            putExtra("event_id", event.id)
+                            putExtra("event_title", event.title)
+                            putExtra("event_description", event.description)
+                            putExtra("event_date", event.date)
+                            putExtra("event_location", event.location)
+                            putExtra("event_category", event.category)
+                        }
+                        context.startActivity(intent)
+                    }) {
+                        Text("View Details")
+                    }
+                }
+            }
         }
     }
 }
 
-class EventDetailActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            // Displaying event details (this can be dynamic later)
-            Text(text = "Event Details Here")
-        }
+
+@Composable
+fun EventDetailView(
+    id: Int,
+    title: String,
+    description: String,
+    date: String,
+    location: String,
+    category: String
+) {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text(text = "Event Details", style = MaterialTheme.typography.headlineSmall)
+        Text(text = "ID: $id")
+        Text(text = "Title: $title")
+        Text(text = "Description: $description")
+        Text(text = "Date: $date")
+        Text(text = "Location: $location")
+        Text(text = "Category: $category")
     }
 }
-
-data class Event(
-    val id: Int,
-    val title: String,
-    val description: String,
-    val date: String,
-    val location: String,
-    val category: String
-)
 
 fun getFakeEvents(): List<Event> {
     return listOf(
