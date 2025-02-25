@@ -59,3 +59,15 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+dependencies {
+    implementation(libs.androidx.lifecycle.livedata.ktx)// Retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    // Gson Converter for Retrofit
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    // Gson
+    implementation ("com.google.code.gson:gson:2.8.8")
+    // Coroutine support (if you are using coroutines)
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+}
+
