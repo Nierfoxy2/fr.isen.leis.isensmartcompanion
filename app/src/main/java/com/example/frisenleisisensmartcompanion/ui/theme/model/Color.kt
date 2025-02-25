@@ -1,4 +1,4 @@
-package com.example.frisenleisisensmartcompanion.ui.theme
+package com.example.frisenleisisensmartcompanion.ui.theme.model
 
 import androidx.compose.ui.graphics.Color
 

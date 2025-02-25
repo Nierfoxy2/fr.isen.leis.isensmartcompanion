@@ -1,6 +1,5 @@
-package com.example.frisenleisisensmartcompanion.ui.theme
+package com.example.frisenleisisensmartcompanion.ui.theme.model
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
