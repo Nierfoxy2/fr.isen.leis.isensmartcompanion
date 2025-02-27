@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -37,21 +38,20 @@ fun HomeView(modifier: Modifier = Modifier) {
     val conversation = remember { mutableStateListOf<String>() }
 
     val context = LocalContext.current // Get the current context for Toast
-    
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(8.dp),
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Title and Logo
         Image(
-            painter = painterResource(id = R.drawable.isen), // Replace with your logo resource
+            painter = painterResource(id = R.drawable.isen),
             contentDescription = "App Logo",
             modifier = Modifier
-                .size(200.dp)
+                .size(180.dp)
                 .padding(bottom = 8.dp)
         )
         Text(
@@ -64,19 +64,22 @@ fun HomeView(modifier: Modifier = Modifier) {
         // Chat history in a scrollable Column
         Column(
             modifier = Modifier
-                .weight(1f)  // Take up available space
-                .verticalScroll(rememberScrollState()) // Make conversation scrollable
-                .padding(bottom = 16.dp)  // Leave space for the input field at the bottom
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 16.dp)
         ) {
-            conversation.forEachIndexed { index, message ->
+            conversation.forEach { message ->
                 val isUserMessage = message.startsWith("You:")
+                val backgroundColor = if (isUserMessage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
+
                 Text(
                     text = message,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Black,
+                    color = Color.White,
                     modifier = Modifier
-                        .padding(bottom = 8.dp)
-                        .padding(8.dp)
+                        .padding(vertical = 4.dp, horizontal = 8.dp)
+                        .background(backgroundColor, shape = MaterialTheme.shapes.medium)
+                        .padding(12.dp)
                 )
             }
         }
@@ -85,35 +88,36 @@ fun HomeView(modifier: Modifier = Modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.Gray)
+                .background(MaterialTheme.colorScheme.surfaceVariant, shape = MaterialTheme.shapes.medium)
                 .padding(8.dp)
         ) {
             TextField(
                 value = question,
                 onValueChange = { question = it },
                 label = { Text("Ask a question") },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                shape = MaterialTheme.shapes.medium
             )
-
 
             Button(
                 onClick = {
                     if (question.text.isNotBlank()) {
-                        //conversation.add("You: ${question.text}")
-                        aiResponse =
-                            "You asked: '${question.text}'" // Replace with actual AI response
+                        aiResponse = "You asked: '${question.text}'"
                         conversation.add("AI: $aiResponse")
-                        question = TextFieldValue("") // Clear input field
+                        question = TextFieldValue("")
 
                         Toast.makeText(context, "Question Submitted", Toast.LENGTH_SHORT).show()
-
                     }
                 },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Gray, // Change button background color
+                    contentColor = Color.White  // Change text color
+                ),
                 modifier = Modifier
                     .padding(start = 8.dp)
                     .align(Alignment.CenterVertically)
             ) {
-                Text("Send", color = Color.White)
+                Text("Send")
             }
         }
     }

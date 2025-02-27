@@ -70,11 +70,10 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.8.8")
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
-    // Import the BoM for the Firebase platform
+
+
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
 
-    // Add the dependency for the Vertex AI in Firebase library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-vertexai")
 
 }
