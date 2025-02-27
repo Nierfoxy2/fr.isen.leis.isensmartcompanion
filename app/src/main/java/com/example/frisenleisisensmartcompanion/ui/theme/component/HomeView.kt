@@ -37,6 +37,7 @@ fun HomeView(modifier: Modifier = Modifier) {
     val conversation = remember { mutableStateListOf<String>() }
 
     val context = LocalContext.current // Get the current context for Toast
+    
 
     Column(
         modifier = modifier

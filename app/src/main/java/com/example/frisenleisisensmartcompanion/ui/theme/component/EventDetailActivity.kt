@@ -5,7 +5,14 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -63,16 +70,48 @@ fun EventDetailView(
     date: String,
     location: String,
     category: String
+) {Card(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp),
+    shape = RoundedCornerShape(12.dp),
+    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
-        Text(text = "Event Details", style = MaterialTheme.typography.headlineSmall)
-        Text(text = "ID: $id")
-        Text(text = "Title: $title")
-        Text(text = "Description: $description")
-        Text(text = "Date: $date")
-        Text(text = "Location: $location")
-        Text(text = "Category: $category")
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "📅 $date",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.secondary
+        )
+        Text(
+            text = "📍 $location",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.secondary
+        )
+        Text(
+            text = "🏷 Category: $category",
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.tertiary
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f))
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = description,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
     }
+}
 }
 interface ApiService {
     @GET("events.json")
@@ -81,7 +120,7 @@ interface ApiService {
 
 object RetrofitInstance {
 
-    private const val BASE_URL = "https://isen-smart-companion-default-rtdb.europe-west1.firebasedatabase.app/"
+    private const val BASE_URL = "https://isen-smart-companion-default-rtdb.europe-west1.firebasedatabase.app"
 
     val retrofit: Retrofit by lazy {
         Retrofit.Builder()
@@ -126,4 +165,3 @@ class EventViewModel : ViewModel() {
         }
     }
 }
-
