@@ -156,13 +156,6 @@ fun EventDetailView(
                 // Display text based on whether the user wants notifications
                 Text(text = if (notificationPreference.value) "Disable Notification" else "Enable Notification")
             }
-
-            // Display the current notification preference (for testing purposes)
-            Text(
-                text = "Notifications enabled: ${notificationPreference.value}",
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.bodyLarge
-            )
         }
     }
 }

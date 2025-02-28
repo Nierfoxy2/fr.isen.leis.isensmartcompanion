@@ -34,7 +34,7 @@ import com.example.frisenleisisensmartcompanion.R
 @Composable
 fun HomeView(modifier: Modifier = Modifier) {
     var question by remember { mutableStateOf(TextFieldValue("")) }
-    var aiResponse by remember { mutableStateOf("Ask me anything!") }
+    var aiResponse by remember { mutableStateOf("") } // Changed to empty string initially
     val conversation = remember { mutableStateListOf<String>() }
 
     val context = LocalContext.current // Get the current context for Toast
@@ -68,6 +68,17 @@ fun HomeView(modifier: Modifier = Modifier) {
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 16.dp)
         ) {
+            // Display initial message if conversation is empty
+            if (conversation.isEmpty()) {
+                Text(
+                    text = "Ask me anything!",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(vertical = 4.dp, horizontal = 8.dp)
+                        .padding(12.dp)
+                )
+            }
             conversation.forEach { message ->
                 val isUserMessage = message.startsWith("You:")
                 val backgroundColor = if (isUserMessage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
@@ -102,7 +113,10 @@ fun HomeView(modifier: Modifier = Modifier) {
             Button(
                 onClick = {
                     if (question.text.isNotBlank()) {
-                        aiResponse = "You asked: '${question.text}'"
+                        val userMessage = "You: ${question.text}"
+                        conversation.add(userMessage)
+                        // Here we will add the chatbot logic
+                        aiResponse = getChatbotResponse(question.text)
                         conversation.add("AI: $aiResponse")
                         question = TextFieldValue("")
 
@@ -120,5 +134,16 @@ fun HomeView(modifier: Modifier = Modifier) {
                 Text("Send")
             }
         }
+    }
+}
+
+fun getChatbotResponse(userMessage: String): String {
+    // Basic chatbot logic for now
+    return when {
+        userMessage.contains("hello", ignoreCase = true) -> "Hello there! How can I help you today?"
+        userMessage.contains("how are you", ignoreCase = true) -> "I'm doing well, thank you for asking!"
+        userMessage.contains("event", ignoreCase = true) -> "You can find all the events in the event tab"
+        userMessage.contains("history", ignoreCase = true) -> "You can find all the history in the history tab"
+        else -> "I'm not sure I understand. Can you rephrase your question?"
     }
 }
