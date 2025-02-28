@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">fr.isen.leis.isensmartcompanion</string>
     <string name="title_activity_event_detail">EventDetailActivity</string>
+    <string name="google_api_key">AIzaSyDGQJI8TekWUoTW7xB4TZ55cfDf7q7PuiY</string>
 </resources>

@@ -30,6 +30,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.example.frisenleisisensmartcompanion.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeView(modifier: Modifier = Modifier) {
@@ -38,6 +41,9 @@ fun HomeView(modifier: Modifier = Modifier) {
     val conversation = remember { mutableStateListOf<String>() }
 
     val context = LocalContext.current // Get the current context for Toast
+    //val database = AppDatabase.getDatabase(context)
+    //val interactionDao = database.interactionDao()
+
 
     Column(
         modifier = modifier
@@ -119,7 +125,16 @@ fun HomeView(modifier: Modifier = Modifier) {
                         aiResponse = getChatbotResponse(question.text)
                         conversation.add("AI: $aiResponse")
                         question = TextFieldValue("")
+                        /*// Save to database
+                        val interaction = Interaction(
+                            question = question.text,
+                            aiResponse = aiResponse
+                        )
 
+                        // Save in background thread (using a coroutine)
+                        CoroutineScope(Dispatchers.IO).launch {
+                            interactionDao.insert(interaction)
+                        }*/
                         Toast.makeText(context, "Question Submitted", Toast.LENGTH_SHORT).show()
                     }
                 },
@@ -147,3 +162,4 @@ fun getChatbotResponse(userMessage: String): String {
         else -> "I'm not sure I understand. Can you rephrase your question?"
     }
 }
+

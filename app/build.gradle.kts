@@ -64,7 +64,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
     implementation ("com.google.code.gson:gson:2.8.8")
@@ -73,16 +72,18 @@ dependencies {
 
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
 
-    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
 
     implementation("com.google.firebase:firebase-vertexai")
 
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
-
     implementation ("androidx.core:core-ktx:1.10.0")
     implementation ("androidx.compose.material3:material3:1.0.1")
 
+    implementation ("androidx.room:room-runtime:2.5.1") // Adjust to the latest version
+    annotationProcessor ("androidx.room:room-compiler:2.5.1")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
 
 
 }
-
