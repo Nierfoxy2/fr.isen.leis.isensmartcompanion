@@ -12,7 +12,7 @@ Notifications: Set reminders for events you're interested in.
 
 Technologies Used :
 Jetpack Compose: For building the UI.
-*Google Gemini AI: For text-based AI interactions.
+Google Gemini AI: For text-based AI interactions.
 *Room Database: For saving interaction history.
 Retrofit: To fetch dynamic event data.
 Firebase: For retrieving event data.
@@ -28,8 +28,8 @@ Run the app:
 Connect an Android device or start an emulator.
 Run the application directly from Android Studio.
 
-*API Key Configuration:
-*To enable Gemini AI functionalities, ensure you have set up an API key from Google Gemini AI SDK. For more details on this, consult Google Gemini AI Client SDK documentation.
+API Key Configuration:
+To enable Gemini AI functionalities, ensure you have set up an API key from Google Gemini AI SDK. For more details on this, consult Google Gemini AI Client SDK documentation.
 
 Features Walkthrough :
 1. Main Screen
