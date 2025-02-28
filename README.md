@@ -1,5 +1,5 @@
-ISEN Smart Companion
-Your Personal Student Assistant
+ISEN Smart Companion Your Personal Student Assistant
+
 Project Description
 The ISEN Smart Companion is a personal assistant application designed for ISEN Toulon students. It helps students manage their academic and associative life (such as BDE, BDS, etc.) by providing personalized advice. The app utilizes an AI model to help students balance their schedules, manage courses, participate in events, and optimize their free time.
 
