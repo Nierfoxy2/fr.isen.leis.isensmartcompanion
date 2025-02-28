@@ -1,22 +1,23 @@
 ISEN Smart Companion Your Personal Student Assistant
 
-Project Description
+Project Description :
 The ISEN Smart Companion is a personal assistant application designed for ISEN Toulon students. It helps students manage their academic and associative life (such as BDE, BDS, etc.) by providing personalized advice. The app utilizes an AI model to help students balance their schedules, manage courses, participate in events, and optimize their free time.
 
-Features
+Features :
 AI-powered assistant to answer student queries.
 Event management: View and track ISEN events.
 *History: Save and view past interactions with the AI.
 Notifications: Set reminders for events you're interested in.
 *Student Agenda: View your courses and planned events.
 
-Technologies Used
+Technologies Used :
 Jetpack Compose: For building the UI.
-Google Gemini AI: For text-based AI interactions.
-Room Database: For saving interaction history.
+*Google Gemini AI: For text-based AI interactions.
+*Room Database: For saving interaction history.
 Retrofit: To fetch dynamic event data.
 Firebase: For retrieving event data.
-Setup
+
+Setup :
 Clone the repository:
 git clone https://github.com/Nierfoxy2/fr.isen.leis.isensmartcompanion.git
 
@@ -30,7 +31,7 @@ Run the application directly from Android Studio.
 *API Key Configuration:
 *To enable Gemini AI functionalities, ensure you have set up an API key from Google Gemini AI SDK. For more details on this, consult Google Gemini AI Client SDK documentation.
 
-Features Walkthrough
+Features Walkthrough :
 1. Main Screen
 Displays the app title, logo, a text input field for user questions, and a button to submit the question.
 The AI's response (currently a simulated response) will appear below the input field.
