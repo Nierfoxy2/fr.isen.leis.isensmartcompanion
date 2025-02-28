@@ -1,6 +1,5 @@
 package com.example.frisenleisisensmartcompanion.ui.theme.component
 
-import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -30,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.frisenleisisensmartcompanion.ui.theme.component.AppDatabase
 import com.example.frisenleisisensmartcompanion.ui.theme.component.Chat
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,14 +39,14 @@ fun HistoryView(navController: NavController) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    // Accéder à la base de données
+    // Access the database
     val db = AppDatabase.getDatabase(context)
     val chatDao = db.chatDao()
 
     var chatHistory by remember { mutableStateOf<List<Chat>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
 
-    // Récupérer l'historique des chats au lancement de l'écran
+    // Fetch chat history on screen launch
     LaunchedEffect(Unit) {
         scope.launch {
             chatHistory = chatDao.getAllChats()
@@ -61,6 +61,23 @@ fun HistoryView(navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // "Clear History" Button
+        Button(
+            onClick = {
+                scope.launch {
+                    chatDao.deleteAllChats()  // Delete all chats from the database
+                    chatHistory = emptyList() // Update UI after clearing history
+                }
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        ) {
+            Text(text = "Effacer l'historique", color = MaterialTheme.colorScheme.onError)
+        }
+
+        // Title
         Text(
             text = "Historique des Chats",
             style = MaterialTheme.typography.headlineMedium,
@@ -68,6 +85,7 @@ fun HistoryView(navController: NavController) {
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
+        // Loading Indicator or Chat List
         if (isLoading) {
             CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         } else {
@@ -75,6 +93,7 @@ fun HistoryView(navController: NavController) {
         }
     }
 }
+
 
 
 @Composable

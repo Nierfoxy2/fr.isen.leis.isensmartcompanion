@@ -135,9 +135,6 @@ fun ChatSection() {
 
             // Sauvegarder la question dans la base de données
             scope.launch {
-                val newChat = Chat(question = query, answer = "Waiting for response...")
-                chatDao.insertChat(newChat)
-
                 // Récupérer la réponse et mettre à jour l'historique
                 geminiManager.generateContent(query).collect { response ->
                     isLoading = false
