@@ -71,10 +71,18 @@ dependencies {
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
 
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
 
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
 
     implementation("com.google.firebase:firebase-vertexai")
+
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+
+    implementation ("androidx.core:core-ktx:1.10.0")
+    implementation ("androidx.compose.material3:material3:1.0.1")
+
+
 
 }
 
