@@ -83,8 +83,13 @@ dependencies {
     implementation ("androidx.core:core-ktx:1.10.0")
     implementation ("androidx.compose.material3:material3:1.0.1")
 
-    implementation ("androidx.room:room-runtime:2.5.1") // Adjust to the latest version
-    annotationProcessor ("androidx.room:room-compiler:2.5.1")
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-ktx:$room_version")
+
+    implementation("androidx.room:room-runtime:$room_version")
+
+    ksp("androidx.room:room-compiler:$room_version")
+
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
 

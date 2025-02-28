@@ -28,9 +28,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 
 @Composable
-fun EventView() {
+fun EventView(navController : NavController) {
     val context = LocalContext.current
     val viewModel: EventViewModel = viewModel()
     val events = viewModel.events.collectAsState(initial = emptyList())

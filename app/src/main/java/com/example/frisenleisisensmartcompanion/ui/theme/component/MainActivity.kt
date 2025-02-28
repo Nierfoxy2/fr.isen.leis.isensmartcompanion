@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -58,6 +59,7 @@ class MainActivity : ComponentActivity() {
 
             // creating our navController
             val navController = rememberNavController()
+            val context = LocalContext.current
 
 
             FrisenleisisensmartcompanionTheme {
@@ -72,13 +74,13 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(innerPadding)
                         ) {
                             composable(homeTab.title) {
-                                HomeView()
+                                HomeView(navController)
                             }
                             composable(eventTab.title) {
-                                EventView()
+                                EventView(navController)
                             }
                             composable(historyTab.title) {
-                                HistoryView()
+                                HistoryView(navController)
                             }
                         }
                     }
@@ -87,47 +89,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-/*
-@Entity(tableName = "history_table")
-data class Interaction(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val question: String,
-    val aiResponse: String,
-    val timestamp: Long = System.currentTimeMillis() // Store timestamp
-)
-@Dao
-interface InteractionDao {
-    @Insert
-    suspend fun insert(interaction: Interaction)
 
-    @Query("SELECT * FROM history_table ORDER BY timestamp DESC")
-    suspend fun getAllInteractions(): List<Interaction>
 
-    @Delete
-    suspend fun delete(interaction: Interaction)
-
-    @Query("DELETE FROM history_table")
-    suspend fun deleteAllInteractions()
-}
-
-@Database(entities = [Interaction::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun interactionDao(): InteractionDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-
-        fun getDatabase(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "interactions_database"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
-}*/

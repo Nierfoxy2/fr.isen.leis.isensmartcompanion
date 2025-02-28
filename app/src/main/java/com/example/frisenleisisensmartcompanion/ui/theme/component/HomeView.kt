@@ -1,6 +1,5 @@
 package com.example.frisenleisisensmartcompanion.ui.theme.component
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,11 +16,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -31,10 +28,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,13 +43,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.frisenleisisensmartcompanion.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeView(modifier: Modifier = Modifier) {
+fun HomeView(navController : NavController, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -92,6 +86,10 @@ fun ChatSection() {
     val scope = rememberCoroutineScope()
     var chatHistory by remember { mutableStateOf<List<Pair<String, Boolean>>>(emptyList()) }
 
+    // Obtenez l'instance de la base de données
+    val db = AppDatabase.getDatabase(context)
+    val chatDao = db.chatDao()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -99,7 +97,7 @@ fun ChatSection() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "ISEN Smart Companion",
+            text = "Welcome On GEMINISEN",
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(bottom = 16.dp)
@@ -135,11 +133,20 @@ fun ChatSection() {
             isLoading = true
             chatHistory = chatHistory + (query to true)
 
+            // Sauvegarder la question dans la base de données
             scope.launch {
+                val newChat = Chat(question = query, answer = "Waiting for response...")
+                chatDao.insertChat(newChat)
+
+                // Récupérer la réponse et mettre à jour l'historique
                 geminiManager.generateContent(query).collect { response ->
                     isLoading = false
                     val newResponse = response.text ?: "Pas de réponse."
                     chatHistory = chatHistory + (newResponse to false)
+
+                    // Mettre à jour la réponse dans la base de données
+                    val updatedChat = Chat(question = query, answer = newResponse)
+                    chatDao.insertChat(updatedChat)
                 }
             }
         })
@@ -225,4 +232,3 @@ fun ChatInputField(onSend: (String) -> Unit) {
         }
     }
 }
-
