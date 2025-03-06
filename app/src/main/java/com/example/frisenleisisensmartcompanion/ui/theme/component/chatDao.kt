@@ -15,4 +15,7 @@ interface ChatDao {
 
     @Query("DELETE FROM chat_history") // This will clear all records
     suspend fun deleteAllChats()
+
+    @Query("DELETE FROM chat_history WHERE id = :chatId")
+    suspend fun deleteChat(chatId: Int)
 }

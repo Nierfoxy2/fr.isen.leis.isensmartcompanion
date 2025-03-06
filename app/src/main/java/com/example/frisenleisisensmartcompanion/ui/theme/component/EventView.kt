@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -24,14 +25,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
 @Composable
-fun EventView(navController : NavController) {
+fun EventView(navController: NavController) {
     val context = LocalContext.current
     val viewModel: EventViewModel = viewModel()
     val events = viewModel.events.collectAsState(initial = emptyList())
@@ -44,6 +46,18 @@ fun EventView(navController : NavController) {
             .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
     ) {
+        // Title Section
+        Text(
+            text = "Upcoming Events",
+            style = MaterialTheme.typography.headlineLarge.copy(
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.2.sp
+            ),
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        // No events or event list
         if (events.value.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -111,9 +125,13 @@ fun EventItem(event: Event, onClick: () -> Unit) {
             Button(
                 onClick = onClick,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
-                Text("View Details")
+                Text(
+                    text = "View Details",
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     }

@@ -26,10 +26,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.frisenleisisensmartcompanion.ui.theme.component.AppDatabase
 import com.example.frisenleisisensmartcompanion.ui.theme.component.Chat
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,18 +39,25 @@ fun HistoryView(navController: NavController) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    // Access the database
     val db = AppDatabase.getDatabase(context)
     val chatDao = db.chatDao()
 
     var chatHistory by remember { mutableStateOf<List<Chat>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
 
-    // Fetch chat history on screen launch
+    // Charger les messages dès l'ouverture de l'écran
     LaunchedEffect(Unit) {
         scope.launch {
             chatHistory = chatDao.getAllChats()
             isLoading = false
+        }
+    }
+
+    // Fonction pour supprimer une conversation spécifique
+    fun deleteChatById(chatId: Int) {
+        scope.launch {
+            chatDao.deleteChat(chatId)
+            chatHistory = chatHistory.filter { it.id.toInt() != chatId }
         }
     }
 
@@ -61,12 +68,23 @@ fun HistoryView(navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // "Clear History" Button
+        // Title Section
+        Text(
+            text = "Historique des Conversations",
+            style = MaterialTheme.typography.headlineMedium.copy(
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.2.sp
+            ),
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        // Button to clear chat history
         Button(
             onClick = {
                 scope.launch {
-                    chatDao.deleteAllChats()  // Delete all chats from the database
-                    chatHistory = emptyList() // Update UI after clearing history
+                    chatDao.deleteAllChats()
+                    chatHistory = emptyList()
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
@@ -74,43 +92,27 @@ fun HistoryView(navController: NavController) {
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         ) {
-            Text(text = "Effacer l'historique", color = MaterialTheme.colorScheme.onError)
+            Text(text = "Vider l'historique", color = MaterialTheme.colorScheme.onError)
         }
 
-        // Title
-        Text(
-            text = "Historique des Chats",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        // Loading Indicator or Chat List
+        // Loading indicator or list of chats
         if (isLoading) {
             CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         } else {
-            ChatList(chatHistory)
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(8.dp)
+            ) {
+                items(chatHistory) { chat ->
+                    ChatItem(chat = chat, onDelete = ::deleteChatById)
+                }
+            }
         }
     }
 }
 
-
-
 @Composable
-fun ChatList(chatHistory: List<Chat>) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(8.dp)
-    ) {       items(chatHistory) { chat ->
-        ChatItem(chat = chat)
-    }
-    }
-}
-
-
-@Composable
-fun ChatItem(chat: Chat) {
-    val context = LocalContext.current
+fun ChatItem(chat: Chat, onDelete: (Int) -> Unit) {
     Card(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -118,40 +120,46 @@ fun ChatItem(chat: Chat) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable {
-                // Ajouter un comportement au clic si nécessaire
-            }
     ) {
         Column(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            // Question de chat
+            // Question display
             Text(
-                text = "Question: ${chat.question}",
+                text = "❓ ${chat.question}",
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
 
-            // Réponse de chat sous la question
+            // Answer display
             Text(
-                text = "Reponse: ${chat.answer}",
+                text = "💬 ${chat.answer}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(top = 4.dp) // Espacement entre la question et la réponse
+                modifier = Modifier.padding(top = 4.dp)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Affichage de la date de chat
+            // Date display
             Text(
-                text = "Date: ${SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(chat.timestamp))}",
+                text = "📅 ${SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(chat.timestamp))}",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Button to delete a specific conversation
+            Button(
+                onClick = { onDelete(chat.id.toInt()) },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+            ) {
+                Text(text = "Supprimer", color = MaterialTheme.colorScheme.onError)
+            }
         }
     }
 }
-

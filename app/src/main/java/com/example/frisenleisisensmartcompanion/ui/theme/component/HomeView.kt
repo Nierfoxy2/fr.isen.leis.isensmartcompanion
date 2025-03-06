@@ -37,26 +37,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.frisenleisisensmartcompanion.R
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeView(navController : NavController, modifier: Modifier = Modifier) {
+fun HomeView(navController: NavController, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color(0xFFE5E5E5), Color(0xFFFFFFFF))
+                )
+            )
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Title and Logo
+        // Logo
         Image(
             painter = painterResource(id = R.drawable.isen),
             contentDescription = "App Logo",
@@ -64,10 +71,15 @@ fun HomeView(navController : NavController, modifier: Modifier = Modifier) {
                 .size(180.dp)
                 .padding(bottom = 8.dp)
         )
+
+        // Title
         Text(
             text = "Smart Companion",
-            style = MaterialTheme.typography.headlineLarge,
-            color = Color.Black,
+            style = MaterialTheme.typography.headlineLarge.copy(
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.2.sp
+            ),
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
@@ -75,6 +87,7 @@ fun HomeView(navController : NavController, modifier: Modifier = Modifier) {
         ChatSection()
     }
 }
+
 
 
 @Composable
@@ -97,7 +110,7 @@ fun ChatSection() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Welcome On GEMINISEN",
+            text = "Ask me anything",
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(bottom = 16.dp)
@@ -164,7 +177,8 @@ fun ChatBubble(message: String, isUser: Boolean) {
             modifier = Modifier
                 .padding(vertical = 4.dp, horizontal = 8.dp)
                 .widthIn(min = 80.dp, max = 280.dp)
-        ) {
+        )
+        {
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodyMedium,
